@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find] # Specific to setuptools
+exclude = ["test.py"]  # Only for test/dev, not part of package.
+
+[project]
+name = "putools"
+version = "1.0" # Follow PEP440
+authors = [{ name="O. W. Petersen", email="oyvind.w.petersen@ntnu.no" },]
+description = "Package provides python tools and utilities for numeric operations, writing/reading numeric data files, and other stuff ."
+requires-python = ">=3" 
+dependencies = ["numpy","time","warnings"] #must be installed for package to work
+
+
