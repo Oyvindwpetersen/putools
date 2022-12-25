@@ -1,8 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-putools.egg-info/PKG-INFO
-putools.egg-info/SOURCES.txt
-putools.egg-info/dependency_links.txt
-putools.egg-info/requires.txt
-putools.egg-info/top_level.txt

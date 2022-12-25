@@ -1,7 +1,0 @@
-Metadata-Version: 2.1
-Name: putools
-Version: 1.0
-Summary: Package provides python tools and utilities for numeric operations, writing/reading numeric data files, and other stuff .
-Author-email: "O. W. Petersen" <oyvind.w.petersen@ntnu.no>
-Requires-Python: >=3
-License-File: LICENSE
