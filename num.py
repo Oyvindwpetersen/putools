@@ -234,7 +234,7 @@ def rangebin(n,d):
 
 def isnumeric(a):
     
-    # Check if a is numeric, i.e. numpy or numbers in list range into bins of given size
+    # Check if a is numeric, i.e. numpy or numbers in list
 
     # Inputs:
     # a: number
