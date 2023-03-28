@@ -255,8 +255,10 @@ def isnumeric(a):
                 isnum=True
             elif isinstance(a[0],float):
                 isnum=True
+            elif isinstance(a[0],np.int32):
+                isnum=True
+
                 
-        
     elif isinstance(a,np.ndarray):
         isnum=True
         
