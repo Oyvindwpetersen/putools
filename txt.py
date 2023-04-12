@@ -62,6 +62,7 @@ def writematrix(fid,matrix,digits=3,delimeter=', ',list_format='e'):
     # Write matrix to file  
 
     # Inputs:
+    # fid: file identifier
     # matrix: vector or matrix with numbers 
     # digits: number of digits
     # delimeter: delimeter between numbers
