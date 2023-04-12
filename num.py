@@ -242,7 +242,6 @@ def isnumeric(a):
     # Outputs:
     # isnum: logical
     
-    
     isnum=False    
     if isinstance(a,int):
         isnum=True
@@ -261,7 +260,7 @@ def isnumeric(a):
                 
     elif isinstance(a,np.ndarray):
         isnum=True
-        
+
     if isinstance(a,bool):
         isnum=False   
         
