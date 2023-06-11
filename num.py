@@ -412,3 +412,80 @@ def block_diag_rep(A,r):
     return out.reshape(-1,n*r)
 
 
+def printprogress(headers,values,formats=None,dispheader=True,n_spaces=8,n_dist=None):
+
+    N=len(headers)
+    if N != len(values):
+        print('***** Wrong length headers/values')
+        
+    if N != len(formats):
+        print('***** Wrong length headers/formats')
+
+    # headers=['Iter','Conv_check','Max r','Min r','Max dr','Min dr']
+    # values=[10,np.pi/100,1.22,-2.4,0.22,-0.00022]
+    # formats=['int','2e','2e','2e','2e','3e'];
+    # dispheader=True
+    
+    if formats is None:
+        formats=['{:.2e}']*N
+    
+    for k in np.arange(N):
+        if formats[k].endswith('e'):
+            formats[k]='{:.' + formats[k] +'}'
+        elif formats[k].endswith('f'):
+            formats[k]='{:.' + formats[k] +'}'
+        elif formats[k].endswith('int'):
+            formats[k]='{:.0f}'
+    
+    header_line=''
+    single_space=' '
+    
+    if n_dist is None:
+        spaces=[n_spaces]*N
+    
+        # Cut spaces if header length exceed max length
+        header_max=15
+        for k in np.arange(N):
+            if len(headers[k])>header_max:
+                spaces[k]=spaces[k]-(len(headers[k])-header_max)
+
+        # Build header
+        sep=[None]*N
+        for k in np.arange(N):
+            
+            header_line=header_line + single_space*spaces[k] + headers[k]
+            sep[k]=len(header_line)
+    
+    else:
+        if len(n_dist)==1:
+            sep=np.cumsum(np.ones(N)*n_dist)
+        else:
+            sep=np.cumsum(n_dist)
+        
+        for k in np.arange(N):
+            header_line=header_line + single_space*int(sep[k]-len(headers[k])-len(header_line)) + headers[k]
+
+    header_line=header_line + single_space*4
+    double_line='|' + '='*(len(header_line)-2) + '|'
+    
+   # Build line
+    value_line=''
+    for k in np.arange(N):
+        
+        if formats[k]=='bool':
+            value_str=str(bool(values[k]))
+        else:
+            value_str=formats[k].format(values[k])
+        
+        spaces_v=int(sep[k]-len(value_line)-len(value_str))
+        
+        value_line=value_line +single_space*spaces_v + value_str
+
+    # Display
+    if dispheader:
+        print(double_line)
+        print(header_line)
+        print(double_line)
+    
+    print(value_line)
+    
