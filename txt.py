@@ -46,13 +46,13 @@ def readfile(InputFileName):
     # InputFileName: filename
     
     # Outputs:
-    # InputFileLines: list with each line as string
+    # inputfilelines: list with each line as string
 
     fid=open(InputFileName,'r')
-    InputFileLines=fid.read().splitlines()
+    inputfilelines=fid.read().splitlines()
     fid.close()
     
-    return InputFileLines
+    return inputfilelines
     
 #https://stackoverflow.com/questions/60618271/python-find-index-of-unique-substring-contained-in-list-of-strings-without-go
 
