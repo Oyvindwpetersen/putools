@@ -36,9 +36,25 @@ def starprint(A_list,n=0):
         print(star_25)
         
         
+def findsubstr(text, sub):
+    #Return all indices at which substring occurs in text
 
+    # Read file to list
+    
+    # Inputs:
+    # text: string
+    # sub: string
+    
+    # Outputs:
+    # index: list
+        
+    return [
+        index
+        for index in range(len(text) - len(sub) + 1)
+        if text[index:].startswith(sub)
+    ]
 
-def readfile(InputFileName):
+def readfile(InputFileName,encode='utf-8'):
 
     # Read file to list
     
@@ -48,7 +64,7 @@ def readfile(InputFileName):
     # Outputs:
     # inputfilelines: list with each line as string
 
-    fid=open(InputFileName,'r')
+    fid=open(InputFileName,'r', encoding=encode)
     inputfilelines=fid.read().splitlines()
     fid.close()
     
