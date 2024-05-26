@@ -9,7 +9,7 @@ Created on
 #%%
 
 import numpy as np
-import time
+from timeit import default_timer as timer
 
 #%%
 
@@ -20,7 +20,7 @@ def tic():
     # Outputs:
     # t0: initial time
     
-    t0=time.time()
+    t0=timer()
     return t0
 
 def toc(t0,digits=5):
@@ -30,7 +30,7 @@ def toc(t0,digits=5):
     # Inputs:
     # t0: initial time
 
-    t1=time.time()
+    t1=timer()
     dt=t1-t0   
     
     if dt>1:
@@ -55,7 +55,7 @@ def tocs(t0):
     # Outputs:
     # dt: elapsed time
 
-    t1=time.time()
+    t1=timer()
     dt=t1-t0   
 
     return dt
