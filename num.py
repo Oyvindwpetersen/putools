@@ -13,196 +13,235 @@ import numpy as np
 #%%
 
 def argmin(A,a_search):
-
-    # Find closest match of a in A
-
-    # Inputs: 
-    # A: parent vector
-    # a_search: elements to find
     
-    # Outputs:
-    # IndexMin: indices
+    '''
+    Find closest match of a in A
+    
+    Arguments
+    ------------
+    inputname (string): name of input file
+    A (array): parent vector
+    a_search (array): elements to find
+
+    Returns
+    ------------
+    idx_min (array): indices of closest match
+    
+    '''
 
     if np.shape(a_search)==():
         ind_min=np.amin(np.abs(A-a_search))
-        IndexMin=ind_min
+        idx_min=ind_min
         
     if isinstance(a_search,list) or isinstance(a_search,np.ndarray):
     
-        IndexMin=np.zeros(np.shape(a_search),dtype=int) #*np.nan
+        idx_min=np.zeros(np.shape(a_search),dtype=int) #*np.nan
         for k in np.arange(len(a_search)):
             ind_min=np.argmin(np.abs(A-a_search[k]))
-            IndexMin[k]=ind_min.astype('int')
+            idx_min[k]=ind_min.astype('int')
         
-    return IndexMin
+    return idx_min
 
 #%%
 
 #%%
 
-def listindexsub(A_list,search_str,casesens=False):
+def listindexsub(L_all,target,casesens=False):
     
-    # Gives index of string among list of strings (partial match allowed)
+    '''
+    Gives index of string among list of strings (partial match allowed)
+    
+    Arguments
+    ------------
+    L_all (list): parent
+    target (string): search target
+    casesens (bool): case sensitivity
+    
+    Returns
+    ------------
+    idx (list): indices of match
+    
+    '''
 
-    # Inputs:
-    # A_list: parent list
-    # search_str: search list
-    # casesens: case sensitivity
-    
-    # Outputs:
-    # index: indices of match
-    
     if casesens==False:
-        index = [i for i, s in enumerate(A_list) if search_str.casefold() in s.casefold()]
+        idx = [i for i, s in enumerate(L_all) if target.casefold() in s.casefold()]
     elif casesens==True:
-        index = [i for i, s in enumerate(A_list) if search_str in s]
+        idx = [i for i, s in enumerate(L_all) if target in s]
 
-    return index
+    return idx
 
 
 #%%
 
-def listindexsingle(L_all,L_search_sub):
-        
+def listindexsingle(L_all,target):
+    
+    '''
+    Find index of string within list of strings
+    
+    Arguments
+    ------------
+    L_all (list): parent
+    target (string): search target
+    
+    Returns
+    ------------
+    idx_sub (number): indices of match
+    
+    '''
+    
     try:
-        ind_sub=L_all.index(L_search_sub)        
+        idx_sub=L_all.index(target)        
     except:        
-        ind_sub=None
+        idx_sub=None
         
-    return ind_sub
+    return idx_sub
 
 
-def listindex(L_all,L_search):
-    
-    # Gives index of string list among bigger string list (exact match, no partial)
-    # Error if no match or more than one match
-    # Case sensitive
+def listindex(L_all,target):
 
-    # Inputs:
-    # L_all: parent list
-    # L_search: search list
+    '''
+    Find index of string(s) within list of strings (exact match, no partial)
+    Error if no match or more than one match
+    Case sensitive
     
-    # Outputs:
-    # index: indices of match
+    Arguments
+    ------------
+    L_all (list): parent
+    target (list): search target
     
-    if isinstance(L_search,str):
-        L_search=[L_search]
+    Returns
+    ------------
+    idx (list): indices of match
+    
+    '''
+    
+    if isinstance(target,str):
+        target=[target]
         
-    index=[None]*len(L_search)
-    for k,L_search_sub in enumerate(L_search):
+    idx=[None]*len(target)
+    for k,target_sub in enumerate(target):
         
-        ind_sub=listindexsingle(L_all,L_search_sub)
+        idx_sub=listindexsingle(L_all,target_sub)
         
-        if ind_sub==None:
-            raise Exception('No match for ' + L_search_sub)
+        if idx_sub==None:
+            raise Exception('No match for ' + target_sub)
         else:
             
             # Check if any match in remainder of list
-            ind_sub_check=listindexsingle(L_all[(ind_sub+1):],L_search_sub)
+            idx_sub_check=listindexsingle(L_all[(idx_sub+1):],target_sub)
             
-            if ind_sub_check==None: # Ok, no more matches for this word
-                index[k]=ind_sub
+            if idx_sub_check is None: # Ok, no more matches for this word
+                idx[k]=idx_sub
             else:
-                print(ind_sub)
-                print(ind_sub_check)
-                raise Exception('Two or more matches for ' + L_search_sub)
+                print(idx_sub)
+                print(idx_sub_check)
+                raise Exception('Two or more matches for ' + target_sub)
                 
         
-    return index
+    return idx
 
 #%%
 
 def num2stre(a,digits=6,delimeter=', '):
     
-    # Number(s) to string in scientific format
-
-    # Inputs:
-    # a: vector or list 
-    # digits: digits
-    # delimeter: delimeter
+    '''
+    Number(s) to string in scientific format
     
-    # Outputs:
-    # str_out: string with numbers
+    Arguments
+    ------------
+    a (array): numbers to convert
+    digits (int): digits behind comma
+    delimeter (string): digits behind comma
+    
+    Returns
+    ------------
+    s (string): numbers separated with delimeter
+    
+    '''
     
     #format_exp='{:.6e}'
     format_exp='{:.' + str(digits) + 'e}'
     
-    str_out='Empty_string'
+    s='Empty_string'
     
     if isinstance(a,int):
-        str_out=format_exp.format(a)
+        s=format_exp.format(a)
         
     elif isinstance(a,float):
-        str_out=format_exp.format(a)
+        s=format_exp.format(a)
       
     elif isinstance(a,np.int32):
-        str_out=format_exp.format(a)
+        s=format_exp.format(a)
           
     elif isinstance(a,list):
         
-        str_out=''
+        s=''
         for a_element in a:
-            str_out=str_out+format_exp.format(a_element) + delimeter
+            s=s+format_exp.format(a_element) + delimeter
             
-        str_out=str_out[0:(-1-len(delimeter))]
+        s=s[0:(-1-len(delimeter))]
         
     elif isinstance(a,np.ndarray):
     
-        str_out=''
+        s=''
         for a_element in np.nditer(a):
-            str_out=str_out+np.format_float_scientific(a_element, unique=False, precision=digits) + delimeter
+            s=s+np.format_float_scientific(a_element, unique=False, precision=digits) + delimeter
         
-        str_out=str_out[0:(-len(delimeter))]
+        s=s[0:(-len(delimeter))]
         
-    return str_out
+    return s
 
 #%%
 
 def num2strf(a,digits=6,delimeter=', '):
     
-    # Number(s) to string in float format 
-
-    # Inputs:
-    # a: vector or list 
-    # digits: digits
-    # delimeter: delimeter
+    '''
+    Number(s) to string in float format
     
-    # Outputs:
-    # str_out: string with numbers
+    Arguments
+    ------------
+    a (array): numbers to convert
+    digits (int): digits behind comma
+    delimeter (string): digits behind comma
+    
+    Returns
+    ------------
+    s (string): numbers separated with delimeter
+    
+    '''
     
     format_f='{:.6f}'
     format_f='{:.' + str(digits) + 'f}'
 
-    str_out='Empty_string'
+    s='Empty_string'
 
     if isinstance(a,int):
-        str_out=format_f.format(a)
+        s=format_f.format(a)
         
     elif isinstance(a,float):
-        str_out=format_f.format(a)
+        s=format_f.format(a)
         
     elif isinstance(a,np.int32):
-        str_out=format_f.format(a)
+        s=format_f.format(a)
          
     elif isinstance(a,list):
         
-        str_out=''
+        s=''
         for a_element in a:
-            str_out=str_out+format_f.format(a_element) + delimeter
+            s=s+format_f.format(a_element) + delimeter
             
-        str_out=str_out[:(-1-len(delimeter))]
+        s=s[:(-1-len(delimeter))]
     elif isinstance(a,np.ndarray):
     
-        str_out=''
+        s=''
         for a_element in np.nditer(a):
-            str_out=str_out + format_f.format(a_element) + delimeter
+            s=s + format_f.format(a_element) + delimeter
         
-        str_out=str_out[:(-len(delimeter))]
+        s=s[:(-len(delimeter))]
         
-    return str_out
+    return s
 
 #%%
-
 
 def rangebin(n,d):
     
@@ -268,6 +307,32 @@ def isnumeric(a):
             
 #%%
 
+
+def ensure_1d_list(N):
+    # Check if N is a single number (int or float)
+    if isinstance(N, (int, float)):
+        return [N]
+    
+    # Check if N is a numpy array
+    elif isinstance(N, np.ndarray):
+        return N.flatten().tolist()
+    
+    # Check if N is a list
+    elif isinstance(N, list):
+        # Check if the list is already 1-dimensional
+        if all(not isinstance(i, (list, np.ndarray)) for i in N):
+            return N
+        else:
+            # Flatten the list if it contains nested lists or arrays
+            return np.array(N).flatten().tolist()
+    
+    # Raise an error if N is of an unsupported type
+    else:
+        raise TypeError("Input must be an int, float, list, or numpy array.")
+        
+        
+
+
 def ensurenp(a,Force1d=False):
     
     # Convert a number to numpy array
@@ -305,17 +370,22 @@ def ensurenp(a,Force1d=False):
 
 #%%
 
-def str2num(a_list,numformat='float',n_col=''):
+def str2num(a_list,numformat='float',n_col=None):
     
-    # Convert list of strings to matrix
-
-    # Inputs:
-    # a_list: list with strings
-    # numformat: 'float' or 'int'
-    # n_col: number of columns to read
-
-    # Outputs:
-    # M: numpy array
+    '''
+    Convert list of strings to matrix
+    
+    Arguments
+    ------------
+    a_list (list): numbers to convert
+    numformat (string): 'float' or 'int'
+    n_col (int): number of columns to read
+    
+    Returns
+    ------------
+    M (array): numbers separated with delimeter
+    
+    '''
 
     if isinstance(a_list,str):
         a_list=[a_list]   
@@ -326,7 +396,7 @@ def str2num(a_list,numformat='float',n_col=''):
     #a_list[1]='-3.11e-3, 6e6, -212, , -2.0 , 55.99'
 
     # Find right size if none specified
-    if n_col=='':
+    if n_col is None:
         n_col=len(a_list[0].split(','))
     
     n_row=len(a_list)
@@ -413,21 +483,23 @@ def block_diag_rep(A,r):
 
 
 def printprogress(headers,values,formats=None,dispheader=True,n_spaces=8,n_dist=None):
-
+    
     N=len(headers)
+    
+    if formats is None:
+        formats=['{:.2e}']*N
+    
     if N != len(values):
         print('***** Wrong length headers/values')
-        
+    
     if N != len(formats):
         print('***** Wrong length headers/formats')
-
+    
     # headers=['Iter','Conv_check','Max r','Min r','Max dr','Min dr']
     # values=[10,np.pi/100,1.22,-2.4,0.22,-0.00022]
     # formats=['int','2e','2e','2e','2e','3e'];
     # dispheader=True
     
-    if formats is None:
-        formats=['{:.2e}']*N
     
     for k in np.arange(N):
         if formats[k].endswith('e'):
@@ -479,7 +551,7 @@ def printprogress(headers,values,formats=None,dispheader=True,n_spaces=8,n_dist=
         
         spaces_v=int(sep[k]-len(value_line)-len(value_str))
         
-        value_line=value_line +single_space*spaces_v + value_str
+        value_line=value_line + single_space*spaces_v + value_str
 
     # Display
     if dispheader:
