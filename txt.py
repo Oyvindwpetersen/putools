@@ -36,81 +36,103 @@ def starprint(A_list,n=0):
         print(star_25)
         
         
-def findsubstr(text, sub):
-    #Return all indices at which substring occurs in text
-
-    # Read file to list
+def findsubstr(full_str,sub_str):
     
-    # Inputs:
-    # text: string
-    # sub: string
+    '''
+    Find all indices at which substring occurs in longer string
     
-    # Outputs:
-    # index: list
+    Arguments
+    ------------
+    full_str (str): full string
+    sub_str (str): substring
+    
+    Returns
+    ------------
+    index: list with indices
+    
+    '''
+    
         
     return [
         index
-        for index in range(len(text) - len(sub) + 1)
-        if text[index:].startswith(sub)
+        for index in range(len(full_str) - len(sub_str) + 1)
+        if full_str[index:].startswith(sub_str)
     ]
-
-def readfile(InputFileName,encode='utf-8'):
-
-    # Read file to list
     
-    # Inputs:
-    # InputFileName: filename
-    
-    # Outputs:
-    # inputfilelines: list with each line as string
+    # https://stackoverflow.com/questions/60618271/python-find-index-of-unique-substring-contained-in-list-of-strings-without-go
 
-    fid=open(InputFileName,'r', encoding=encode)
+def readfile(file_name,encode='utf-8'):
+
+    '''
+    Read text file
+    
+    Arguments
+    ------------
+    fid: file identifier
+    file_name (str): filename including folder
+    encode (str): encoding
+    
+    Returns
+    ------------
+    inputfilelines: list with each line as string
+    
+    '''
+    
+    fid=open(file_name,'r',encoding=encode)
     inputfilelines=fid.read().splitlines()
     fid.close()
     
     return inputfilelines
     
-#https://stackoverflow.com/questions/60618271/python-find-index-of-unique-substring-contained-in-list-of-strings-without-go
 
-
-def writematrix(fid,matrix,digits=3,delimeter=', ',list_format='e'):
+def writematrix(fid,matrix,digits=3,delimeter=', ',format='e'):
     
-    # Write matrix to file  
-
-    # Inputs:
-    # fid: file identifier
-    # matrix: vector or matrix with numbers 
-    # digits: number of digits
-    # delimeter: delimeter between numbers
-    # list_format: e,f, or int (for all numbers same format) or [int,e,e] for different for each column
+    '''
+    Write matrix to text file
+    
+    Arguments
+    ------------
+    fid: file identifier
+    matrix (np array): vector or matrix with numbers 
+    digits (int): number of digits
+    delimeter (str): between numbers
+    format (str): 'e','f', or 'int' or ['int','e','e'] for different for each column
+    
+    Returns
+    ------------
+    None
+    
+    '''
     
     matrix=np.atleast_2d(matrix)
     (n_row,n_col)=np.shape(matrix)
 
-    if isinstance(list_format,str):
-        list_format=[list_format]
-        
-    if len(list_format)==1:
-        list_format=n_col*list_format;
+    # Ensure list
+    if isinstance(format,str):
+        format=[format]
+
+    # If uniform format, copy for all columns
+    if len(format)==1:
+        format=n_col*format;
     
     for k in np.arange(n_row):
         
         str_row=''
-        a_el_str='None '
+        tmp_str='None '
         for j in np.arange(n_col):
-            if list_format[j]=='int':
-                a_el_str=str(int(matrix[k,j]))
-            elif list_format[j]=='e':
-                a_el_str=num.num2stre(matrix[k,j],digits)
-            elif list_format[j]=='f':
-                a_el_str=num.num2strf(matrix[k,j],digits)
+            if format[j]=='int':
+                tmp_str=str(int(matrix[k,j]))
+            elif format[j]=='e':
+                tmp_str=num.num2stre(matrix[k,j],digits)
+            elif format[j]=='f':
+                tmp_str=num.num2strf(matrix[k,j],digits)
             else:
-                raise Exception('Invalid format: ' + list_format[j])
+                raise Exception('Invalid format: ' + format[j])
                 
-            str_row=str_row + a_el_str + delimeter
+            str_row=str_row + tmp_str + delimeter
             
+         
         str_row=str_row[:(-len(delimeter))] + '\n'    
 
         fid.write(str_row)
 
-#%%
